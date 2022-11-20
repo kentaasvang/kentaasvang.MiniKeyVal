@@ -16,11 +16,14 @@ public class KeyValController : ControllerBase
   }
 
   [HttpGet("{key}")]
-  public IActionResult Get([FromBody] string value, string key)
+  public IActionResult Get(string key)
   {
-    _logger.LogInformation($"Inserting value: {value} with key: {key}");
+    _logger.LogInformation("Trying to retrieve value on key: {key}");
     var result = _keyValStore.Get(key);
-    return Ok();
+
+    return result
+      ? Redirect("url")
+      : NotFound();
   }
 
   [HttpHead]
@@ -38,7 +41,8 @@ public class KeyValController : ControllerBase
   [HttpPut("{key}")]
   public IActionResult Put([FromBody] string value, string key)
   {
-    var result = _keyValStore.InsertOrUpdate(key, value);
+    _logger.LogInformation($"Trying to insert value: {value} on key: {key}");
+    var result = _keyValStore.Insert(key, value);
 
     return result
       ? Ok()

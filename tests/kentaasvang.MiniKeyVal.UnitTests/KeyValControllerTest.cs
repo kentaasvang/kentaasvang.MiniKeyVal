@@ -17,38 +17,72 @@ public class KeyValControllerTest
   }
 
   [Fact]
-  public void Insert_ShouldReturn200Ok()
+  public void Put_ShouldReturn200Ok()
   {
     // Arrange
     var key = "some-random-key";
     var value = "some-random-value";
 
     _keyValStoreMock
-      .Setup(store => store.InsertOrUpdate(key, value))
+      .Setup(store => store.Insert(key, value))
       .Returns(true);
 
     // Act
-    var result = _sut.Put(value, key);
+    var response = _sut.Put(value, key);
 
     // Assert
-    Assert.IsType<OkResult>(result);
+    Assert.IsType<OkResult>(response);
   }
 
   [Fact]
-  public void Insert_WhenKeyExists_ShouldReturn409Conflict()
+  public void Put_WhenKeyExists_ShouldReturn409Conflict()
   {
     // Arrange
     var key = "some-random-key";
     var value = "some-random-value";
 
     _keyValStoreMock
-      .Setup(store => store.InsertOrUpdate(key, value))
+      .Setup(store => store.Insert(key, value))
       .Returns(false);
 
     // Act
-    var result = _sut.Put(value, key);
+    var response = _sut.Put(value, key);
 
     // Assert
-    Assert.IsType<ConflictResult>(result);
+    Assert.IsType<ConflictResult>(response);
+  }
+
+  [Fact]
+  public void Get_ShouldReturn302Redirect()
+  {
+    // Arrange
+    var key = "some-random-key";
+
+    _keyValStoreMock
+      .Setup(store => store.Get(key))
+      .Returns(true);
+
+    // Act
+    var response = _sut.Get(key);
+
+    // Assert
+    Assert.IsType<RedirectResult>(response);
+  }
+
+  [Fact]
+  public void Get_WhenKeyNotFound_ShouldReturn404NotFound()
+  {
+    // Arrange
+    var key = "some-random-key";
+
+    _keyValStoreMock
+      .Setup(store => store.Get(key))
+      .Returns(false);
+
+    // Act
+    var response = _sut.Get(key);
+
+    // Assert
+    Assert.IsType<NotFoundResult>(response);
   }
 }

@@ -1,6 +1,6 @@
 namespace kentaasvang.MiniKeyVal;
 
-public enum DeletedEnum
+public enum Deleted
 {
   No = 0,
   Soft = 1,
