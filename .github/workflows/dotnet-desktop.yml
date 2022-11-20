@@ -31,7 +31,7 @@ jobs:
         dotnet-version: 7.0.x
 
     - name: Build api-project 
-      -run: dotnet build src/kentaasvang.MiniKeyVal/
+      run: dotnet build src/kentaasvang.MiniKeyVal/
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
