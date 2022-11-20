@@ -6,18 +6,21 @@ namespace kentaasvang.MiniKeyVal.Controllers;
 [Route("[controller]")]
 public class KeyValController : ControllerBase
 {
+    private ILogger<KeyValController> _logger { get; }
     private IKeyValStore _keyValStore { get; }
 
-    public KeyValController(IKeyValStore keyValStore)
+  public KeyValController(ILogger<KeyValController> logger, IKeyValStore keyValStore)
   {
+        _logger = logger;
         _keyValStore = keyValStore;
-    }
+  }
 
   [HttpGet("{key}")]
-  public IActionResult Get(string key)
+  public IActionResult Get([FromBody] string value, string key)
   {
+    _logger.LogInformation($"Inserting value: {value} with key: {key}");
     var result = _keyValStore.Get(key);
-    return Ok(result);
+    return Ok();
   }
 
   [HttpHead]
@@ -33,10 +36,13 @@ public class KeyValController : ControllerBase
   }
 
   [HttpPut("{key}")]
-  public IActionResult Put(string key)
+  public IActionResult Put([FromBody] string value, string key)
   {
-    var result = _keyValStore.CreateOrUpdate(key);
-    return Ok(result);
+    var result = _keyValStore.InsertOrUpdate(key, value);
+
+    return result
+      ? Ok()
+      : Conflict();
   }
 
   [HttpDelete]

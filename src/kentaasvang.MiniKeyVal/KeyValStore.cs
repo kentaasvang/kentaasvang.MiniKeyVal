@@ -3,7 +3,7 @@ namespace kentaasvang.MiniKeyVal;
 public interface IKeyValStore
 {
   public Record Get(string key);
-  public Record CreateOrUpdate(string key);
+  public bool InsertOrUpdate(string key, string value);
 }
 
 public class KeyValStore : IKeyValStore
@@ -13,7 +13,7 @@ public class KeyValStore : IKeyValStore
         throw new NotImplementedException();
     }
 
-    public Record CreateOrUpdate(string key)
+    public bool InsertOrUpdate(string key, string value)
     {
         throw new NotImplementedException();
     }
