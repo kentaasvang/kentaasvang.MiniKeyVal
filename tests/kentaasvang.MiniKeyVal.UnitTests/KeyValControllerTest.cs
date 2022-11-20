@@ -31,7 +31,7 @@ public class KeyValControllerTest
     var response = _sut.Put(value, key);
 
     // Assert
-    Assert.IsType<OkResult>(response);
+    Assert.IsType<CreatedResult>(response);
   }
 
   [Fact]
@@ -81,6 +81,40 @@ public class KeyValControllerTest
 
     // Act
     var response = _sut.Get(key);
+
+    // Assert
+    Assert.IsType<NotFoundResult>(response);
+  }
+
+  [Fact]
+  public void Delete_ShouldReturn204NoContent()
+  {
+    // Arrange
+    var key = "some-random-key";
+
+    _keyValStoreMock
+      .Setup(store => store.Delete(key))
+      .Returns(true);
+
+    // Act
+    var response = _sut.Delete(key);
+
+    // Assert
+    Assert.IsType<NoContentResult>(response);
+  }
+
+  [Fact]
+  public void Delete_WhenRecordIsDeleted_ShouldReturn404NotFound()
+  {
+    // Arrange
+    var key = "some-random-key";
+
+    _keyValStoreMock
+      .Setup(store => store.Delete(key))
+      .Returns(false);
+
+    // Act
+    var response = _sut.Delete(key);
 
     // Assert
     Assert.IsType<NotFoundResult>(response);

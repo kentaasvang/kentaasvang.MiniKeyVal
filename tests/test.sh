@@ -1,1 +1,1 @@
-dotnet test tests/kentaasvang.MiniKeyVal.UnitTests/
+dotnet test --verbosity minimal tests/kentaasvang.MiniKeyVal.UnitTests/

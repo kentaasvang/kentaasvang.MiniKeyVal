@@ -18,7 +18,7 @@ public class KeyValController : ControllerBase
   [HttpGet("{key}")]
   public IActionResult Get(string key)
   {
-    _logger.LogInformation("Trying to retrieve value on key: {key}");
+    _logger.LogInformation($"Attempting to GET value with key: {key}");
     var result = _keyValStore.Get(key);
 
     return result
@@ -41,14 +41,22 @@ public class KeyValController : ControllerBase
   [HttpPut("{key}")]
   public IActionResult Put([FromBody] string value, string key)
   {
-    _logger.LogInformation($"Trying to insert value: {value} on key: {key}");
+    _logger.LogInformation($"Attempting to PUT value with key: {key}");
     var result = _keyValStore.Insert(key, value);
 
     return result
-      ? Ok()
+      ? Created(nameof(Get), "key")
       : Conflict();
   }
 
-  [HttpDelete]
-  public string Delete() => throw new NotImplementedException(); 
+  [HttpDelete("{key}")]
+  public IActionResult Delete(string key) 
+  {
+    _logger.LogInformation($"Attempting to DELETE value with key: {key}");
+    var result = _keyValStore.Delete(key);
+
+    return result
+      ? NoContent()
+      : NotFound();
+  }
 }

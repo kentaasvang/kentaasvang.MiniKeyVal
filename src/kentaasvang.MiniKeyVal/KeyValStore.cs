@@ -4,11 +4,17 @@ public interface IKeyValStore
 {
   public bool Get(string key);
   public bool Insert(string key, string value);
+  public bool Delete(string key);
 }
 
 public class KeyValStore : IKeyValStore
 {
-  public bool Get(string key)
+  public bool Delete(string key)
+  {
+    throw new NotImplementedException();
+  }
+
+    public bool Get(string key)
   {
 
     throw new NotImplementedException();
